@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lether Zaa</title>
+
+<style>
+/* ===== GLOBAL ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0f0f0f;
+  color: white;
+  text-align: center;
+}
+
+/* ===== LOADING SCREEN ===== */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: #0f0f0f; /* ganti sesuai mode */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-box {
+  width: 70%;
+  max-width: 300px;
+  height: 8px;
+  background: brown;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  width: 40%;
+  height: 100%;
+  background: white;
+  border-radius: 10px;
+  animation: loadingMove 1.2s infinite ease-in-out;
+}
+
+.loading-text {
+  margin-top: 12px;
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+@keyframes loadingMove {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ===== MAIN CONTENT ===== */
+#content {
+  display: none;
+  padding: 30px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 10px;
+  border: 3px solid white;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile h2 {
+  margin-bottom: 20px;
+  font-weight: normal;
+  color: #ccc;
+}
+
+/* ===== LINK BUTTON ===== */
+.link {
+  display: block;
+  background: #1e1e1e;
+  padding: 15px;
+  margin: 12px auto;
+  max-width: 320px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: 0.2s;
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 12px;
+}
+
+.link:hover {
+  background: #00ff88;
+  color: black;
+  transform: scale(1.03);
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loading-box">
+    <div class="loading-bar"></div>
+  </div>
+  <p class="loading-text">Loading...</p>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+
+  <div class="profile">
+    <div class="avatar">
+    <img src="https://raw.githubusercontent.com/lether-zaa/Lether/4a57ab58f1f734252ab5e356f215e0872b2a2e36/IMG_20251225_233215.jpg">
+    </div>
+    <h2>Lether</h2>
+  </div>
+
+  <a class="link" href="https://www.youtube.com/@adiganzz728">Youtube</a>
+  <a class="link" href="https://www.instagram.com/yoru_tsukishiro728?igsh=MXFoamZ4YmNyZm4xZg==">Instagram</a>
+  <a class="link" href="https://www.threads.com/@yoru_tsukishiro728">Threads</a>
+  <a class="link" href="https://www.facebook.com/share/1AiMYiZwPo/">Facebook</a>
+  <a class="link" href="https://saweria.co/si4bgame">Saweria</a>
+  <a class="link" href="https://whatsapp.com/channel/0029VbBHYg62UPBPo4he8q3s">Kode Boombox</a>
+
+</div>
+
+<script>
+window.onload = () => {
+  setTimeout(() => {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  }, 1200); // durasi loading (ms)
+};
+</script>
+
+</body>
+</html>
