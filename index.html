@@ -21,6 +21,15 @@
 <meta name="twitter:image" content="https://lether-zaa.github.io/Lether/preview.jpg">
 
 <style>
+/* ===== CUSTOM SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0f1f; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#7c3aed, #00ff88);
+  border-radius: 10px;
+}
+html { scrollbar-width: thin; scrollbar-color: #7c3aed #0a0f1f; }
+
 /* ===== GLOBAL ===== */
 * {
   margin: 0;
@@ -30,28 +39,144 @@
 }
 
 body {
-  background: #0f0f0f;
+  background: linear-gradient(135deg, #0a0f1f, #111827, #1e1b4b);
+  background-size: 400% 400%;
+  animation: bgMove 15s ease infinite;
   color: white;
   text-align: center;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+@keyframes bgMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== STARS — 20 points in 400×400px tile ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 5%  10%, white, transparent),
+    radial-gradient(1px 1px at 15% 40%, white, transparent),
+    radial-gradient(2px 2px at 25% 70%, white, transparent),
+    radial-gradient(1px 1px at 35% 20%, white, transparent),
+    radial-gradient(2px 2px at 45% 55%, white, transparent),
+    radial-gradient(1px 1px at 55% 85%, white, transparent),
+    radial-gradient(2px 2px at 65% 30%, white, transparent),
+    radial-gradient(1px 1px at 75% 60%, white, transparent),
+    radial-gradient(2px 2px at 85% 15%, white, transparent),
+    radial-gradient(1px 1px at 95% 45%, white, transparent),
+    radial-gradient(2px 2px at 10% 90%, white, transparent),
+    radial-gradient(1px 1px at 20% 50%, white, transparent),
+    radial-gradient(2px 2px at 30%  5%, white, transparent),
+    radial-gradient(1px 1px at 40% 75%, white, transparent),
+    radial-gradient(2px 2px at 50% 35%, white, transparent),
+    radial-gradient(1px 1px at 60% 65%, white, transparent),
+    radial-gradient(2px 2px at 70% 95%, white, transparent),
+    radial-gradient(1px 1px at 80% 25%, white, transparent),
+    radial-gradient(2px 2px at 90% 80%, white, transparent),
+    radial-gradient(1px 1px at 100% 55%, white, transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: twinkle 4s infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* ===== SHOOTING STAR (body::after) ===== */
+body::after {
+  content: "";
+  position: fixed;
+  top: 8%;
+  left: 80%;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
+  border-radius: 2px;
+  animation: shootingStar 6s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+@keyframes shootingStar {
+  0%   { transform: translate(0, 0) rotate(-30deg);           opacity: 0; }
+  5%   { opacity: 1; }
+  30%  { transform: translate(-500px, 350px) rotate(-30deg);  opacity: 0; }
+  100% { transform: translate(-500px, 350px) rotate(-30deg);  opacity: 0; }
+}
+
+/* ===== SPINNING GRADIENT (CSS @property for smooth conic-gradient rotation) ===== */
+@property --gradient-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spinGradient {
+  from { --gradient-angle: 0deg; }
+  to   { --gradient-angle: 360deg; }
 }
 
 /* ===== LOADING SCREEN ===== */
 #loading {
   position: fixed;
   inset: 0;
-  background: #0f0f0f; /* ganti sesuai mode */
+  background: #0f0f0f;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  transition: opacity 0.6s ease;
+}
+
+#loading.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient(from var(--gradient-angle), #00ff88, #7c3aed, #ec4899, #00bfff, #00ff88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  animation: spinGradient 3s linear infinite;
+}
+
+.loading-logo span {
+  width: 50px;
+  height: 50px;
+  background: #0f0f0f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
 }
 
 .loading-box {
   width: 70%;
   max-width: 300px;
   height: 8px;
-  background: brown;
+  background: #333;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -59,53 +184,87 @@ body {
 .loading-bar {
   width: 40%;
   height: 100%;
-  background: white;
+  background: linear-gradient(90deg, #7c3aed, #00ff88, #00bfff);
   border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.7), 0 0 6px rgba(0, 191, 255, 0.5);
   animation: loadingMove 1.2s infinite ease-in-out;
 }
 
 .loading-text {
-  margin-top: 12px;
+  margin-top: 14px;
   color: white;
-  font-size: 14px;
-  letter-spacing: 1px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: loadingPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes loadingMove {
-  0%   { transform: translateX(-100%); }
-  50%  { transform: translateX(100%); }
-  100% { transform: translateX(100%); }
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(400%); }
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }
 
 /* ===== MAIN CONTENT ===== */
 #content {
   display: none;
   padding: 30px;
+  position: relative;
+  z-index: 2;
 }
 
-.avatar {
-  width: 100px;
-  height: 100px;
+/* ===== AVATAR — Rotating Gradient Glow Border + Pulse ===== */
+.avatar-wrapper {
+  width: 108px;
+  height: 108px;
   margin: 0 auto 10px;
-  border: 3px solid white;
   border-radius: 50%;
   padding: 4px;
+  background: conic-gradient(from var(--gradient-angle), #00ff88, #7c3aed, #ec4899, #00bfff, #00ff88);
+  animation: spinGradient 3s linear infinite, avatarPulse 2.5s ease-in-out infinite;
 }
 
-.avatar img {
+.avatar-wrapper img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  display: block;
 }
 
+@keyframes avatarPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.4), 0 0 20px rgba(124, 58, 237, 0.2); }
+  50%       { box-shadow: 0 0 25px rgba(0, 191, 255, 0.7), 0 0 50px rgba(124, 58, 237, 0.5); }
+}
+
+/* ===== PROFILE ===== */
 .profile h2 {
-  margin-bottom: 20px;
+  margin-bottom: 6px;
   font-weight: normal;
-  color: #ccc;
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  animation: textGlow 3s ease-in-out infinite;
 }
 
-/* ===== LINK BUTTON ===== */
+@keyframes textGlow {
+  0%   { text-shadow: 0 0 8px #00ff88, 0 0 20px #00ff88; color: #ccc; }
+  33%  { text-shadow: 0 0 8px #7c3aed, 0 0 20px #7c3aed; color: #ddd; }
+  66%  { text-shadow: 0 0 8px #00bfff, 0 0 20px #00bfff; color: #ccc; }
+  100% { text-shadow: 0 0 8px #00ff88, 0 0 20px #00ff88; color: #ccc; }
+}
+
+.tagline {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+}
+
+/* ===== LINK BUTTONS ===== */
 .link {
   display: block;
   background: #1e1e1e;
@@ -115,65 +274,306 @@ body {
   border-radius: 12px;
   text-decoration: none;
   color: white;
-  font-weight: bold;
-  transition: 0.2s;
-  border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 12px;
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 3;
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    letter-spacing 0.25s ease;
 }
 
-.link:hover {
-  background: #00ff88;
-  color: black;
-  transform: scale(1.03);
+/* Shimmer sweep */
+.link::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+
+.link:hover::after { left: 125%; }
+.link:active       { transform: scale(0.92); }
+
+/* Platform hover colors */
+.link-youtube:hover {
+  background: #FF0000; color: white; border-color: #FF0000;
+  box-shadow: 0 20px 50px rgba(255, 0, 0, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-instagram:hover {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: white; border-color: transparent;
+  box-shadow: 0 20px 50px rgba(220, 39, 67, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-threads:hover {
+  background: #1a1a1a; color: white; border-color: #555;
+  box-shadow: 0 20px 50px rgba(80, 80, 80, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-facebook:hover {
+  background: #1877F2; color: white; border-color: #1877F2;
+  box-shadow: 0 20px 50px rgba(24, 119, 242, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-tiktok:hover {
+  background: linear-gradient(135deg, #010101, #69C9D0);
+  color: white; border-color: #69C9D0;
+  box-shadow: 0 20px 50px rgba(105, 201, 208, 0.5);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-saweria:hover {
+  background: #F97316; color: white; border-color: #F97316;
+  box-shadow: 0 20px 50px rgba(249, 115, 22, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-kodeboombox:hover {
+  background: #25D366; color: white; border-color: #25D366;
+  box-shadow: 0 20px 50px rgba(37, 211, 102, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+.link-discord:hover {
+  background: #5865F2; color: white; border-color: #5865F2;
+  box-shadow: 0 20px 50px rgba(88, 101, 242, 0.6);
+  transform: translateY(-10px) scale(1.05); letter-spacing: 1px;
+}
+
+/* ===== RANDOM PHOTO BACKGROUND ===== */
+#photo-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.random-photo {
+  position: absolute;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  opacity: 0.18;
+  animation: photoFloat var(--float-duration, 6s) ease-in-out infinite var(--float-delay, 0s);
+}
+
+@keyframes photoFloat {
+  0%, 100% { transform: rotate(var(--rot, 0deg)) translateY(0); }
+  50%       { transform: rotate(var(--rot, 0deg)) translateY(var(--float-y, -8px)); }
+}
+
+/* ===== FLOATING PARTICLES ===== */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatParticle var(--duration, 5s) ease-in-out infinite var(--delay, 0s);
+}
+
+@keyframes floatParticle {
+  0%   { transform: translateY(0);    opacity: 0; }
+  20%  { opacity: 0.6; }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(-60px); opacity: 0; }
+}
+
+/* ===== METEOR (JS-generated) ===== */
+.meteor {
+  position: fixed;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+
+/* ===== REVEAL ANIMATION — Blur-to-Clear + Scale ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px) scale(0.92);
+  filter: blur(6px);
+  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-play-state: paused;
+}
+
+.reveal.go:nth-child(1)  { animation-delay: 0.05s; animation-play-state: running; }
+.reveal.go:nth-child(2)  { animation-delay: 0.15s; animation-play-state: running; }
+.reveal.go:nth-child(3)  { animation-delay: 0.25s; animation-play-state: running; }
+.reveal.go:nth-child(4)  { animation-delay: 0.35s; animation-play-state: running; }
+.reveal.go:nth-child(5)  { animation-delay: 0.45s; animation-play-state: running; }
+.reveal.go:nth-child(6)  { animation-delay: 0.55s; animation-play-state: running; }
+.reveal.go:nth-child(7)  { animation-delay: 0.65s; animation-play-state: running; }
+.reveal.go:nth-child(8)  { animation-delay: 0.75s; animation-play-state: running; }
+.reveal.go:nth-child(9)  { animation-delay: 0.85s; animation-play-state: running; }
+.reveal.go:nth-child(10) { animation-delay: 0.95s; animation-play-state: running; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.92);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 </style>
 </head>
-
 <body>
+  <div id="photo-bg"></div>
 
-<!-- LOADING -->
-<div id="loading">
-  <div class="loading-box">
-    <div class="loading-bar"></div>
-  </div>
-  <p class="loading-text">Loading...</p>
-</div>
-
-<!-- CONTENT -->
-<div id="content">
-
-  <div class="profile">
-    <div class="avatar">
-    <img src="https://lether-zaa.github.io/Lether/profile.jpg">
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="loading-logo"><span>L</span></div>
+    <div class="loading-box">
+      <div class="loading-bar"></div>
     </div>
-    <h2>Lether</h2>
+    <p class="loading-text">Loading...</p>
   </div>
 
-  <a class="link" href="https://www.youtube.com/@adiganzz728">Youtube</a>
-  <a class="link" href="https://www.instagram.com/yoru_tsukishiro728?igsh=MXFoamZ4YmNyZm4xZg==">Instagram</a>
-  <a class="link" href="https://www.threads.com/@yoru_tsukishiro728">Threads</a>
-  <a class="link" href="https://www.facebook.com/share/1AiMYiZwPo/">Facebook</a>
-  <a class="link" href="https://www.tiktok.com/@yoru_tsukishiro?_r=1&_t=ZS-92Zi4rsTOBb">TikTok</a>
-  <a class="link" href="https://saweria.co/si4bgame">Saweria</a>
-  <a class="link" href="https://whatsapp.com/channel/0029VbBHYg62UPBPo4he8q3s">Kode Boombox</a>
-  <a class="link" href="https://discord.gg/ZAkjFjev3">Discord</a>
-
-</div>
+  <!-- CONTENT -->
+  <div id="content">
+    <div class="profile reveal">
+      <div class="avatar-wrapper">
+        <img src="https://lether-zaa.github.io/Lether/profile.jpg" alt="Lether">
+      </div>
+      <h2>Lether</h2>
+      <p class="tagline">follow all sosmed ya ✨</p>
+    </div>
+    <a class="link link-youtube     reveal" href="https://www.youtube.com/@adiganzz728">▶ Youtube</a>
+    <a class="link link-instagram   reveal" href="https://www.instagram.com/yoru_tsukishiro728?igsh=MXFoamZ4YmNyZm4xZg==">📷 Instagram</a>
+    <a class="link link-threads     reveal" href="https://www.threads.com/@yoru_tsukishiro728">✳ Threads</a>
+    <a class="link link-facebook    reveal" href="https://www.facebook.com/share/1AiMYiZwPo/">👥 Facebook</a>
+    <a class="link link-tiktok      reveal" href="https://www.tiktok.com/@yoru_tsukishiro?_r=1&_t=ZS-92Zi4rsTOBb">🎵 TikTok</a>
+    <a class="link link-saweria     reveal" href="https://saweria.co/si4bgame">☕ Saweria</a>
+    <a class="link link-kodeboombox reveal" href="https://whatsapp.com/channel/0029VbBHYg62UPBPo4he8q3s">💬 Kode Boombox</a>
+    <a class="link link-discord     reveal" href="https://discord.gg/CyHDAuREp">🎮 Discord</a>
+  </div>
 
 <script>
+const images = [
+  "https://lether-zaa.github.io/Lether/FB.png",
+  "https://lether-zaa.github.io/Lether/YT.png",
+  "https://lether-zaa.github.io/Lether/X.png",
+  "https://lether-zaa.github.io/Lether/IG.png",
+  "https://lether-zaa.github.io/Lether/KB.png",
+  "https://lether-zaa.github.io/Lether/Threads.png"
+];
+
+function generateRandomPhotos() {
+  const container = document.getElementById("photo-bg");
+
+  images.forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("random-photo");
+
+    const size    = Math.random() * 200 + 150;
+    const maxLeft = Math.max(0, window.innerWidth  - size);
+    const maxTop  = Math.max(0, window.innerHeight - size);
+
+    img.style.width = size + "px";
+    img.style.left  = (Math.random() * maxLeft) + "px";
+    img.style.top   = (Math.random() * maxTop)  + "px";
+
+    const rotate   = (Math.random() * 40 - 20).toFixed(1);
+    const floatY   = -(Math.random() * 12 + 4).toFixed(1);
+    const duration = (Math.random() * 4 + 5).toFixed(1);
+    const delay    = (Math.random() * 3).toFixed(1);
+
+    img.style.setProperty("--rot",            `${rotate}deg`);
+    img.style.setProperty("--float-y",        `${floatY}px`);
+    img.style.setProperty("--float-duration", `${duration}s`);
+    img.style.setProperty("--float-delay",    `-${delay}s`);
+
+    img.onerror = () => { img.style.display = "none"; };
+    container.appendChild(img);
+  });
+}
+
+function generateParticles() {
+  const container = document.getElementById("photo-bg");
+  const colors    = ["#7c3aed", "#00ff88", "#00bfff", "#ec4899", "white"];
+
+  for (let i = 0; i < 18; i++) {
+    const p    = document.createElement("div");
+    p.classList.add("particle");
+
+    const size = (Math.random() * 4 + 2).toFixed(1);
+    p.style.width      = size + "px";
+    p.style.height     = size + "px";
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.left       = (Math.random() * 100) + "%";
+    p.style.top        = (Math.random() * 100) + "%";
+
+    p.style.setProperty("--duration", (Math.random() * 4 + 3).toFixed(1) + "s");
+    p.style.setProperty("--delay",    "-" + (Math.random() * 5).toFixed(1) + "s");
+
+    container.appendChild(p);
+  }
+}
+
+function generateMeteors() {
+  const delayMs = [0, 3000, 5500];
+
+  delayMs.forEach((delay, i) => {
+    setTimeout(() => {
+      const m = document.createElement("div");
+      m.classList.add("meteor");
+      m.style.top              = (Math.random() * 40 + 5)  + "%";
+      m.style.left             = (Math.random() * 30 + 60) + "%";
+      m.style.animationName            = "shootingStar";
+      m.style.animationDuration        = (6 + i * 2) + "s";
+      m.style.animationTimingFunction  = "linear";
+      m.style.animationIterationCount  = "infinite";
+      m.style.animationDelay           = "-" + (Math.random() * 4).toFixed(1) + "s";
+      document.body.appendChild(m);
+    }, delay);
+  });
+}
+
 window.onload = () => {
+  generateRandomPhotos();
+  generateParticles();
+  generateMeteors();
+
   setTimeout(() => {
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("content").style.display = "block";
-  }, 2000); // durasi loading (ms)
+    const loading = document.getElementById("loading");
+    loading.classList.add("fade-out");
+    loading.addEventListener("transitionend", () => {
+      loading.style.display = "none";
+      // Tampilkan content lalu trigger animasi reveal
+      const content = document.getElementById("content");
+      content.style.display = "block";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          content.querySelectorAll(".reveal").forEach(el => el.classList.add("go"));
+        });
+      });
+    }, { once: true });
+  }, 2000);
 };
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
